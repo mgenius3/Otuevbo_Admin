@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "../../../../.."
+    },
+    {
+      "path": "../../../../../../../MOBILE APPLICATION/otuevbo"
+    },
+    {
+      "path": "../../../../../../../BACKEND PROGRAMMING/Otuevbo"
+    },
+    {
+      "path": "../../../../../../gocab"
+    }
+  ],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "Otuevbo"
+  }
+}
