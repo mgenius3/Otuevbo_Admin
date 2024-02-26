@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import FetchApiClient from 'fetch_api_clients/api';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { Link } from 'next/link';
+import Skeleton from '@mui/material/Skeleton';
 
 const PackagesList = () => {
   const [packages, setPackages] = useState([]);
@@ -70,30 +71,34 @@ const PackagesList = () => {
           </Button>
         </Stack>
         <Grid container spacing={2}>
-          {packages.map((pack) => (
-            <Grid item key={pack.id} xs={12} sm={6} md={4}>
-              <Card style={{ padding: '10px', marginBottom: '10px' }}>
-                <ListItem disableGutters>
-                  <ListItemText
-                    primary={(pack.paymentPlan + ' plan').toUpperCase()}
-                    secondary={
-                      <>
-                        <Typography component="div" variant="body2" color="text.primary">
-                          Repayment Amount: ${pack.repaymentAmount}
-                        </Typography>
-                        <Typography component="div" variant="body2" color="text.secondary">
-                          {`Total Repayment: $${pack.repaymentAmount}`}
-                        </Typography>
-                      </>
-                    }
-                  />
-                  <Button onClick={() => handleDeletePackage(pack.id)} style={{ color: 'red' }}>
-                    Delete
-                  </Button>
-                </ListItem>
-              </Card>
-            </Grid>
-          ))}
+          {packages.length == 0 ? (
+            packages.map((pack) => (
+              <Grid item key={pack.id} xs={12} sm={6} md={4}>
+                <Card style={{ padding: '10px', marginBottom: '10px' }}>
+                  <ListItem disableGutters>
+                    <ListItemText
+                      primary={(pack.paymentPlan + ' plan').toUpperCase()}
+                      secondary={
+                        <>
+                          <Typography component="div" variant="body2" color="text.primary">
+                            Repayment Amount: ${pack.repaymentAmount}
+                          </Typography>
+                          <Typography component="div" variant="body2" color="text.secondary">
+                            {`Total Repayment: $${pack.repaymentAmount}`}
+                          </Typography>
+                        </>
+                      }
+                    />
+                    <Button onClick={() => handleDeletePackage(pack.id)} style={{ color: 'red' }}>
+                      Delete
+                    </Button>
+                  </ListItem>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Skeleton />
+          )}
         </Grid>
       </div>
     </>
