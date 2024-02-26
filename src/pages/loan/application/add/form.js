@@ -62,7 +62,7 @@ const plan = [
   },
 ];
 
-export const AddPackageFormDetails = () => {
+const AddPackageFormDetails = () => {
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(false);
   const [maturityDate, setMaturityDate] = useState(null); // State to store maturity date
@@ -224,3 +224,5 @@ export const AddPackageFormDetails = () => {
     </form>
   );
 };
+
+export default AddPackageFormDetails;

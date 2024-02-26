@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { AddPackageFormDetails } from './form';
+import AddPackageFormDetails from './form';
 
 const Page = () => (
   <>

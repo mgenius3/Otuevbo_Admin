@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { LoanRepaymentFormDetails } from './form';
+import LoanRepaymentFormDetails from './form';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import FetchApiClient from 'fetch_api_clients/api';

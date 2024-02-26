@@ -25,7 +25,7 @@ const plan = [
   },
 ];
 
-export const LoanRepaymentFormDetails = ({ data }) => {
+const LoanRepaymentFormDetails = ({ data }) => {
   const [values, setValues] = useState({});
   const [loadingRepayment, setLoadingRepayment] = useState(false); // State to manage loading indicator for Repayment button
   const api = new FetchApiClient('/loan');
@@ -113,3 +113,5 @@ export const LoanRepaymentFormDetails = ({ data }) => {
     </form>
   );
 };
+
+export default LoanRepaymentFormDetails;
