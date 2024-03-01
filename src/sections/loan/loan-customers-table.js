@@ -28,6 +28,7 @@ export const CustomersTable = (props) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [contentview, setContentView] = useState();
 
   const router = useRouter();
   const {
@@ -79,13 +80,12 @@ export const CustomersTable = (props) => {
               {items.map((customer) => {
                 const isSelected = selected.includes(customer.id);
                 // const dateApplied = format(customer.dateApplied, 'MM/dd/yyyy');
-
                 return (
                   <>
                     <Dialog open={open} onClose={handleClose}>
                       <DialogTitle>Loan Applications Details</DialogTitle>
                       <DialogContent>
-                        <LoanApplicationDetailsPage loanApplication={customer} />
+                        <LoanApplicationDetailsPage loanApplication={contentview} />
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>Close</Button>
@@ -97,7 +97,10 @@ export const CustomersTable = (props) => {
                       key={customer.userId}
                       selected={isSelected}
                       // onClick={() => router.push('customer', customer, { shallow: false })}
-                      onClick={handleClickOpen}
+                      onClick={(e) => {
+                        handleClickOpen(e);
+                        setContentView(customer);
+                      }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox

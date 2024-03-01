@@ -71,7 +71,7 @@ const PackagesList = () => {
           </Button>
         </Stack>
         <Grid container spacing={2}>
-          {packages.length == 0 ? (
+          {packages.length != 0 ? (
             packages.map((pack) => (
               <Grid item key={pack.id} xs={12} sm={6} md={4}>
                 <Card style={{ padding: '10px', marginBottom: '10px' }}>
@@ -97,7 +97,26 @@ const PackagesList = () => {
               </Grid>
             ))
           ) : (
-            <Skeleton />
+            <Grid container spacing={2}>
+              <Grid xs={12} sm={6} md={4}>
+                <Skeleton
+                  style={{ padding: '10px', marginBottom: '10px' }}
+                  sx={{ width: '100%', height: 200, padding: '10px' }}
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={4}>
+                <Skeleton
+                  style={{ padding: '10px', marginBottom: '10px' }}
+                  sx={{ width: '100%', height: 200, padding: '10px' }}
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={4}>
+                <Skeleton
+                  style={{ padding: '10px', marginBottom: '10px' }}
+                  sx={{ width: '100%', height: 200, padding: '10px' }}
+                />
+              </Grid>
+            </Grid>
           )}
         </Grid>
       </div>

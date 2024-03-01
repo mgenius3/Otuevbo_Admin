@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
-import AddPackageFormDetails from './form';
+import AddLoanApplication from './form';
 
 const Page = () => (
   <>
@@ -27,7 +27,7 @@ const Page = () => (
                 <AccountProfile />
               </Grid> */}
               <Grid xs={12} md={6} lg={8}>
-                <AddPackageFormDetails />
+                <AddLoanApplication />
               </Grid>
             </Grid>
           </div>

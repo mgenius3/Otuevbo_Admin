@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Box,
   Button,
@@ -8,64 +8,18 @@ import {
   CardHeader,
   Divider,
   TextField,
-  Unstable_Grid2 as Grid,
+  Grid,
+  Typography,
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import FetchApiClient from 'fetch_api_clients/api';
 import { useRouter } from 'next/router';
 
-const plan = [
-  {
-    value: 'daily',
-    label: 'Daily',
-    days: 1,
-  },
-  {
-    value: 'weekly',
-    label: 'Weekly',
-    days: 7,
-  },
-  {
-    value: 'bi-weekly',
-    label: 'Bi-weekly',
-    days: 14,
-  },
-  {
-    value: 'monthly',
-    label: 'Monthly',
-    months: 1,
-  },
-  {
-    value: 'bi-monthly',
-    label: 'Bi-Monthly',
-    months: 2,
-  },
-  {
-    value: '3 month',
-    label: '3 Month',
-    months: 3,
-  },
-  {
-    value: '4 month',
-    label: '4 Month',
-    months: 4,
-  },
-  {
-    value: '6 month',
-    label: '6 Month',
-    months: 6,
-  },
-  {
-    value: 'annual',
-    label: 'Annual',
-    months: 12,
-  },
-];
-
-const AddPackageFormDetails = () => {
-  const [values, setValues] = useState({});
+const AddLoanApplication = () => {
+  const [values, setValues] = useState({
+    status: 'pending',
+  });
   const [loading, setLoading] = useState(false);
-  const [maturityDate, setMaturityDate] = useState(null); // State to store maturity date
   const api = new FetchApiClient('/loan');
   const router = useRouter();
 
@@ -74,58 +28,21 @@ const AddPackageFormDetails = () => {
     setValues((prevState) => ({
       ...prevState,
       [name]: value,
-      maturityDate,
     }));
-
-    // Calculate maturity date when payment plan changes
-    if (name === 'paymentPlan') {
-      calculateMaturityDate(value);
-    }
   }, []);
-
-  const calculateMaturityDate = (paymentPlan) => {
-    // Calculate maturity date based on payment plan
-    let calculatedMaturityDate = null;
-    const currentDate = new Date();
-    const selectedPlan = plan.find((item) => item.value === paymentPlan);
-
-    if (selectedPlan) {
-      if (selectedPlan.days) {
-        calculatedMaturityDate = addDays(currentDate, selectedPlan.days);
-      } else if (selectedPlan.months) {
-        calculatedMaturityDate = addMonths(currentDate, selectedPlan.months);
-      }
-    }
-
-    setMaturityDate(calculatedMaturityDate);
-  };
-
-  const addDays = (date, days) => {
-    const newDate = new Date(date);
-    newDate.setDate(date.getDate() + days);
-    return newDate;
-  };
-
-  const addMonths = (date, months) => {
-    const newDate = new Date(date);
-    newDate.setMonth(date.getMonth() + months);
-    return newDate;
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    // Here you can perform the submission, like calling an API to save the details
     try {
-      // Simulating an API call with setTimeout
-      const { response, error } = await api.post(`/add/packages/`, values);
+      console.log(values);
+      const { response, error } = await api.post(`/add/application/${values['userId']}`, values);
       if (error) {
         throw new Error(error);
       }
-      toast.success(response);
-      // After submission is successful, you can reset the form values
-      setValues({});
-      router.back();
+      toast.success('loan application submitted');
+      setValues({}); // Reset form values
+      router.back(); // Redirect to previous page
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -133,91 +50,309 @@ const AddPackageFormDetails = () => {
     }
   };
 
+  const employmentStatusOptions = [
+    'Full-Time Employment (FTE)',
+    'Part-Time Employment',
+    'Temporary or Seasonal Employment',
+    'Contract Employment',
+    'Freelance or Independent Contractor',
+    'Internship',
+    'Apprenticeship',
+    'Self-Employed or Entrepreneur',
+    'Casual Employment',
+    'Zero-Hour Contract',
+    'Consultant',
+    'Commission-Based Employment',
+    'Remote or Telecommuting',
+  ];
+
+  const bankOptions = [
+    'AccessBank',
+    'Zenith Bank',
+    'First Bank of Nigeria',
+    'Guaranty Trust Bank (GTB)',
+    'United Bank for Africa (UBA)',
+    'Union Bank',
+    'Fidelity Bank',
+    'Ecobank',
+    'Sterling Bank',
+    'Polaris Bank',
+    'Wema Bank',
+    'First City Monument Bank (FCMB)',
+    'Stanbic IBTC Bank',
+    'Keystone Bank',
+    'Unity Bank',
+    'Heritage Bank',
+  ];
+
   return (
     <form autoComplete="off" onSubmit={handleSubmit}>
       <Card>
-        <CardHeader subheader="Fill in all information below" title="Loan Packages" />
-        <CardContent sx={{ pt: 0 }}>
+        <CardHeader subheader="Fill in all information below" title="Loan Application" />
+        <CardContent>
           <Box sx={{ m: -1.5 }}>
-            <Grid container spacing={3}>
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  helperText="Payment Plan"
-                  name="paymentPlan"
-                  onChange={(event) => {
-                    handleChange(event);
-                    calculateMaturityDate(event.target.value);
-                  }}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                >
-                  <option selected> </option>
-                  {plan.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  helperText="Loan Amount"
-                  name="loanAmount"
-                  type="number"
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-              <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  helperText="Repayment Amount"
-                  name="repaymentAmount"
-                  onChange={handleChange}
-                  required
-                  type="number"
-                />
-              </Grid>
-
-              {/* <Grid xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  helperText="Total Repayment Amount"
-                  name="totalRepaymentAmount"
-                  onChange={handleChange}
-                  type="number"
-                />
-              </Grid> */}
-
-              {/* Display Maturity Date */}
-              <Grid item xs={6}>
-                {maturityDate && (
+            {/* Personal Information Section */}
+            <Box mb={2}>
+              <Typography variant="subtitle1" gutterBottom>
+                Personal Information
+              </Typography>
+              <Divider />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    helperText="Maturity Date"
-                    name="maturityDate"
-                    value={maturityDate.toLocaleDateString()}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    label="User ID"
+                    name="userId"
+                    onChange={handleChange}
+                    required
                   />
-                )}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField fullWidth label="Name" name="name" onChange={handleChange} required />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Gender"
+                    name="gender"
+                    onChange={handleChange}
+                    required
+                    SelectProps={{ native: true }}
+                  >
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Age"
+                    name="age"
+                    type="number"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Marital Status"
+                    name="maritalStatus"
+                    onChange={handleChange}
+                    required
+                    SelectProps={{ native: true }}
+                  >
+                    <option value=""></option>
+                    <option value="Male">Single</option>
+                    <option value="Female">In a relationship</option>
+                    <option value="Female">Married</option>
+                  </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Phone"
+                    name="phone"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Residential Address"
+                    name="residentialAddress"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    type="email"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField fullWidth label="NIN" name="nin" onChange={handleChange} required />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField fullWidth label="BVN" name="bvn" onChange={handleChange} required />
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
+
+            {/* Business Information Section */}
+            <Box mb={2}>
+              <Typography variant="subtitle1" gutterBottom>
+                Business Information
+              </Typography>
+              <Divider />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Business Registration No"
+                    name="businessRegNo"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Business Name"
+                    name="businessName"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Employment Status"
+                    name="employmentStatus"
+                    onChange={handleChange}
+                    required
+                    SelectProps={{ native: true }}
+                  >
+                    <option value=""></option>
+                    {employmentStatusOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Job Position"
+                    name="jobPosition"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Business Address"
+                    name="businessAddress"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Business Email"
+                    name="businessEmail"
+                    type="email"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Business Phone No"
+                    name="businessPhoneNo"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+
+            {/* Financial Information Section */}
+            <Box mb={2}>
+              <Typography variant="subtitle1" gutterBottom>
+                Financial Information
+              </Typography>
+              <Divider />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Payment Plan"
+                    name="paymentPlan"
+                    onChange={handleChange}
+                    required
+                    select
+                    SelectProps={{ native: true }}
+                  >
+                    <option value=""></option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Loan Amount"
+                    name="loanAmount"
+                    type="number"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Repayment Amount"
+                    name="repaymentAmount"
+                    type="number"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Bank"
+                    name="bank"
+                    onChange={handleChange}
+                    required
+                    SelectProps={{ native: true }}
+                  >
+                    <option value=""></option>
+                    {bankOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Account Number"
+                    name="accountNumber"
+                    type="number"
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Box>
           </Box>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={loading} // Disable the button when loading
-          >
-            {loading ? 'Submitting...' : 'Save details'}
+          <Button variant="contained" type="submit" disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit'}
           </Button>
         </CardActions>
       </Card>
@@ -225,4 +360,4 @@ const AddPackageFormDetails = () => {
   );
 };
 
-export default AddPackageFormDetails;
+export default AddLoanApplication;
