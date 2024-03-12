@@ -2,8 +2,8 @@ class FetchApiClient {
   constructor(baseURL, token = '') {
     this.baseURL = baseURL;
     this.token = token;
-    this.domain = 'http://localhost:3000/v1';
-    // this.domain = 'https://otuevbo.onrender.com/v1';
+    // this.domain = 'http://localhost:3000/v1';
+    this.domain = 'https://otuevbo.onrender.com/v1';
   }
 
   async get(endpoint) {
