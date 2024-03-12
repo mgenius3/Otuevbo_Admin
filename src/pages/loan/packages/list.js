@@ -81,10 +81,13 @@ const PackagesList = () => {
                       secondary={
                         <>
                           <Typography component="div" variant="body2" color="text.primary">
-                            Repayment Amount: ${pack.repaymentAmount}
+                            Loan Amount: ${pack.loanAmount}
                           </Typography>
                           <Typography component="div" variant="body2" color="text.secondary">
-                            {`Total Repayment: $${pack.repaymentAmount}`}
+                            {`Repayment Amount: $${pack.repaymentAmount}`}
+                          </Typography>
+                          <Typography component="div" variant="body2" color="text.secondary">
+                            {`No of Repayment: ${pack.noOfRepayment}`}
                           </Typography>
                         </>
                       }

@@ -157,10 +157,10 @@ const LoanApplicationDetailsPage = ({ loanApplication }) => {
               <ListItemText primary="Payment Plan:" secondary={loanApplication?.paymentPlan} />
             </ListItem>
             <ListItem>
-              <ListItemText
-                primary="Total Repayment Amount:"
-                secondary={loanApplication?.totalRepaymentAmount}
-              />
+              <ListItemText primary="Maturity Date" secondary={loanApplication?.maturityDate} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="No Of Repayment" secondary={loanApplication?.noOfRepayment} />
             </ListItem>
           </List>
           <Divider />
